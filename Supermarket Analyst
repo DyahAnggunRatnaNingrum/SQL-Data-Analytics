@@ -1,0 +1,84 @@
+
+select * from `sales.supermarket`
+
+-- Produk apa yang menghasilkan pendapatan (revenue) paling besar?
+
+SELECT 
+    product_line,
+    SUM(revenue) AS total_revenue,
+    SUM(quantity) AS total_quantity
+FROM `sales.supermarket`
+GROUP BY product_line
+ORDER BY total_revenue DESC;
+
+-- Cabang mana yang memiliki keuntungan (gross_income) paling tinggi?
+SELECT 
+    branch,
+    city,
+    SUM(gross_income) AS total_income,
+    SUM(revenue) AS total_revenue,
+    SUM(cogs) AS total_cogs
+FROM `sales.supermarket`
+GROUP BY branch, city
+ORDER BY total_income DESC;
+
+-- Apakah Member membeli lebih banyak dibanding pelanggan Normal?
+SELECT 
+    customer_type,
+    COUNT(*) AS total_transaction,
+    SUM(quantity) AS total_item_bought,
+    AVG(revenue) AS avg_spent_per_transaction
+FROM `sales.supermarket`
+GROUP BY customer_type;
+
+-- Gender mana yang menghasilkan revenue lebih besar?
+SELECT 
+    gender_customer,
+    SUM(revenue) AS total_revenue,
+    AVG(rating) AS avg_rating
+FROM `sales.supermarket`
+GROUP BY gender_customer;
+
+-- Bagaimana tren penjualan per tanggal?
+SELECT 
+    date,
+    SUM(revenue) AS total_revenue,
+    SUM(gross_income) AS total_income
+FROM `sales.supermarket`
+GROUP BY date
+ORDER BY date;
+
+-- Metode pembayaran apa yang paling banyak digunakan?
+SELECT 
+    payment_method,
+    COUNT(*) AS total_transaction,
+    SUM(revenue) AS total_revenue
+FROM `sales.supermarket`
+GROUP BY payment_method
+ORDER BY total_transaction DESC;
+
+-- Produk mana yang memiliki margin kotor (gm_pct) tertinggi?
+SELECT 
+    product_line,
+    AVG(gm_pct) AS avg_gross_margin_pct
+FROM `sales.supermarket`
+GROUP BY product_line
+ORDER BY avg_gross_margin_pct DESC;
+
+-- Recency, Frequency, Monetary Analyst
+SELECT 
+    customer_type,
+    MAX(date) AS last_purchase,
+    COUNT(invoice_id) AS frequency,
+    SUM(revenue) AS monetary
+FROM `sales.supermarket`
+GROUP BY customer_type;
+
+-- Apakah harga produk memengaruhi jumlah pembelian?
+SELECT 
+    product_line,
+    AVG(unit_cost) AS avg_cost,
+    SUM(quantity) AS total_quantity
+FROM `sales.supermarket`
+GROUP BY product_line
+ORDER BY total_quantity DESC;
